@@ -1,56 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- 
-      This is an HTML comment
-      You can write text in a comment and the content won't be visible in the page
-    -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Love You Dikshu</title>
+<style>
+  @keyframes bgAnimation {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(-45deg, #ff9aa2, #ffb7b2, #ffdac1, #e2f0cb, #b5ead7);
+    background-size: 400% 400%;
+    animation: bgAnimation 15s ease infinite;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+  }
 
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="https://glitch.com/favicon.ico" />
+  .floating {
+    position: absolute;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    animation: floatUp linear forwards;
+    pointer-events: none;
+  }
+  @keyframes floatUp {
+    0% {
+      transform: translateY(100vh) rotate(0deg);
+      opacity: 0;
+    }
+    30% {opacity: 1;}
+    100% {
+      transform: translateY(-20vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
 
-  <!--
-      This is the page head - it contains info the browser uses
-      Like the title, which appears on the browser tab but not inside the page
-      Further down you'll see the content that displays in the page
-    -->
-  <title>Hello World!</title>
+  .heart {
+    position: absolute;
+    animation: heartFloat linear forwards;
+    pointer-events: none;
+  }
+  @keyframes heartFloat {
+    0% {
+      transform: translateY(100vh) scale(0.5) rotate(0deg);
+      opacity: 0.5;
+    }
+    50% {opacity: 1;}
+    100% {
+      transform: translateY(-10vh) scale(1.3) rotate(360deg);
+      opacity: 0;
+    }
+  }
 
-  <!-- The website stylesheet -->
-  <link rel="stylesheet" href="/style.css" />
-
-  <!-- The website JavaScript file -->
-  <script src="/script.js" defer></script>
+  .gallery {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    height: 210px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    z-index: 10;
+  }
+  .gallery img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+  }
+  .gallery img.active {
+    opacity: 1;
+  }
+</style>
 </head>
-
 <body>
-  <!--
-      The body includes the content you see in the page
-      Each element is defined using tags, like this <div></div>
-      The attributes like class="wrapper" let us style elements in the CSS
-    -->
-  <div class="wrapper">
-    <div class="content" role="main">
-      <h1 class="title">Oh hi website!</h1>
-      <img src="/cool-website.svg" class="illustration" alt="cool website" />
-      <div class="instructions">
-        <p>
-          Fork <a href="https://github.com/glitchdotcom/website-to-compute">this project</a> and open it in a GitHub Codespace.
-        </p>
-        <p> Follow the steps in the README to deploy your new website to Fastly in a few steps!
-        </p>
 
-      </div>
+<div class="gallery">
+  <img src="pic1.jpg" alt="Dikshu 1" class="active">
+  <img src="pic2.jpg" alt="Dikshu 2">
+  <img src="pic3.jpg" alt="Dikshu 3">
+</div>
 
-      <footer class="footer">
-        <div>
-          <a class="remix" href="https://github.com/glitchdotcom/website-to-compute">🚧 Get your own site</a>
-        </div>
-      </footer>
-    </div>
-  </div>
+<script>
+  const textColors = ['#ffffff','#ffe6f2','#ffccdd','#ff99bb','#ff66aa','#ff3399'];
+  const hearts = ['❤️','💖','💘','💕','💓','💞','💗','💝','💜'];
+
+  function createFloatingText() {
+    let el = document.createElement('div');
+    el.className = 'floating';
+    el.innerHTML = '❤️ I Love You Dikshu ❤️';
+    el.style.left = Math.random() * window.innerWidth + 'px';
+    el.style.top = Math.random() * window.innerHeight + 'px';
+    el.style.fontSize = (1 + Math.random() * 1.5) + 'em';
+    el.style.color = textColors[Math.floor(Math.random()*textColors.length)];
+    el.style.animationDuration = (6 + Math.random() * 6) + 's';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),12000);
+  }
+
+  function createHeart() {
+    let heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = hearts[Math.floor(Math.random()*hearts.length)];
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.top = Math.random() * window.innerHeight + 'px';
+    heart.style.fontSize = (1 + Math.random() * 3) + 'em';
+    heart.style.animationDuration = (5 + Math.random() * 7) + 's';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),12000);
+  }
+
+  // initial fill
+  for(let i=0;i<40;i++){createFloatingText();}
+  for(let i=0;i<30;i++){createHeart();}
+
+  // keep spawning slowly so it stays full but not bulk
+  setInterval(createFloatingText, 400); // new text every 0.4s
+  setInterval(createHeart, 600); // new heart every 0.6s
+
+  // fade gallery JS
+  const imgs = document.querySelectorAll('.gallery img');
+  let idx = 0;
+  setInterval(() => {
+    imgs[idx].classList.remove('active');
+    idx = (idx + 1) % imgs.length;
+    imgs[idx].classList.add('active');
+  }, 4000);
+</script>
+
 </body>
-
 </html>
